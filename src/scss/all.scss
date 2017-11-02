@@ -3,3 +3,8 @@ $primary-color: yellow;
 body {
 	background-color: $primary-color;
 }
+
+.rotate {
+	transform: rotate(120deg);
+	filter: blur(3px);
+}

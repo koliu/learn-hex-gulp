@@ -2,6 +2,8 @@ var gulp = require('gulp'); // 引入 gulp
 var jade = require('gulp-jade');
 var sass = require('gulp-sass');
 var plumber = require('gulp-plumber');
+var postcss = require('gulp-postcss');
+var autoprefixer = require('autoprefixer');
 
 // 加入任務
 gulp.task('copyHTML', function () {
@@ -24,9 +26,19 @@ gulp.task('jade', function() {
 });
 
 gulp.task('scss', function () {
+  var plugins = [
+    autoprefixer({browsers: [
+      'last 1 version',
+      '> 5%',
+      'ie 6-8',
+      'Firefox > 20'
+      ]})
+  ];
+
   return gulp.src('./src/scss/*.scss')
     .pipe(plumber())
-    .pipe(sass().on('error', sass.logError))
+    .pipe(sass().on('error', sass.logError)) // compile to css
+    .pipe(postcss(plugins))
     .pipe(gulp.dest('./dist/css'));
 });
 

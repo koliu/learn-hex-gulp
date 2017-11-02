@@ -1,15 +1,12 @@
 var gulp = require('gulp'); // 引入 gulp
-var jade = require('gulp-jade');
-var sass = require('gulp-sass');
-var plumber = require('gulp-plumber');
-var postcss = require('gulp-postcss');
+var $ = require('gulp-load-plugins')(); // just use for gulp-xxx
 var autoprefixer = require('autoprefixer');
 
 // 加入任務
 gulp.task('copyHTML', function () {
 	// copy src/*.* to dist/
 	return gulp.src('./src/**/*.html')
-  .pipe(plumber())
+  .pipe($.plumber())
 	.pipe(gulp.dest('./dist/'));
 });
 
@@ -18,8 +15,8 @@ gulp.task('jade', function() {
  
   // gulp.src('./src/*.jade')
   gulp.src('./src/**/*.jade') // for all sub-dirs & files belong to src
-    .pipe(plumber())
-    .pipe(jade({
+    .pipe($.plumber())
+    .pipe($.jade({
     	pretty: true // Don't compress
     }))
     .pipe(gulp.dest('./dist/'))
@@ -36,9 +33,9 @@ gulp.task('scss', function () {
   ];
 
   return gulp.src('./src/scss/*.scss')
-    .pipe(plumber())
-    .pipe(sass().on('error', sass.logError)) // compile to css
-    .pipe(postcss(plugins))
+    .pipe($.plumber())
+    .pipe($.sass().on('error', $.sass.logError)) // compile to css
+    .pipe($.postcss(plugins))
     .pipe(gulp.dest('./dist/css'));
 });
 

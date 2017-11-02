@@ -26,3 +26,9 @@ gulp.task('scss', function () {
     .pipe(gulp.dest('./dist/css'));
 });
 
+// monitoring source changes & autorun the task
+gulp.task('watch', function () {
+  gulp.watch('./src/scss/*.scss', ['scss']);
+  gulp.watch('./src/**/*.jade', ['jade']);
+});
+

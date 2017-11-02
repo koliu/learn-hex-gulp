@@ -1,11 +1,13 @@
 var gulp = require('gulp'); // 引入 gulp
 var jade = require('gulp-jade');
 var sass = require('gulp-sass');
+var plumber = require('gulp-plumber');
 
 // 加入任務
 gulp.task('copyHTML', function () {
 	// copy src/*.* to dist/
 	return gulp.src('./src/**/*.html')
+  .pipe(plumber())
 	.pipe(gulp.dest('./dist/'));
 });
 
@@ -14,6 +16,7 @@ gulp.task('jade', function() {
  
   // gulp.src('./src/*.jade')
   gulp.src('./src/**/*.jade') // for all sub-dirs & files belong to src
+    .pipe(plumber())
     .pipe(jade({
     	pretty: true // Don't compress
     }))
@@ -22,6 +25,7 @@ gulp.task('jade', function() {
 
 gulp.task('scss', function () {
   return gulp.src('./src/scss/*.scss')
+    .pipe(plumber())
     .pipe(sass().on('error', sass.logError))
     .pipe(gulp.dest('./dist/css'));
 });

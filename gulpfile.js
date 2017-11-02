@@ -1,10 +1,11 @@
 var gulp = require('gulp'); // 引入 gulp
 var jade = require('gulp-jade');
+var sass = require('gulp-sass');
 
 // 加入任務
 gulp.task('copyHTML', function () {
 	// copy src/*.* to dist/
-	return gulp.src('./src/**')
+	return gulp.src('./src/**/*.html')
 	.pipe(gulp.dest('./dist/'));
 });
 
@@ -18,3 +19,10 @@ gulp.task('jade', function() {
     }))
     .pipe(gulp.dest('./dist/'))
 });
+
+gulp.task('scss', function () {
+  return gulp.src('./src/scss/*.scss')
+    .pipe(sass().on('error', sass.logError))
+    .pipe(gulp.dest('./dist/css'));
+});
+

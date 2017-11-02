@@ -32,3 +32,5 @@ gulp.task('watch', function () {
   gulp.watch('./src/**/*.jade', ['jade']);
 });
 
+// default task
+gulp.task('default', ['scss','jade','watch']);

@@ -65,7 +65,11 @@ gulp.task('babel', () => {
       presets: ['es2015']
     }))
     .pipe($.concat('all.js'))
-    .pipe($.uglify()) // put it after compiled & concated
+    .pipe($.uglify({ // put it after compiled & concated
+      compress: {
+        drop_console: true
+      }
+    }))
     .pipe($.sourcemaps.write('.'))
     .pipe(gulp.dest(dist + 'js'))
     .pipe(browserSync.stream());

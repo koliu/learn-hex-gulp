@@ -1,6 +1,7 @@
 var gulp = require('gulp'); // 引入 gulp
 var $ = require('gulp-load-plugins')(); // just use for gulp-xxx
 var autoprefixer = require('autoprefixer');
+var mainBowerFiles = require('main-bower-files');
 
 var srcs = {
   html: './src/**/*.html',
@@ -63,6 +64,17 @@ gulp.task('babel', () =>
   .pipe(gulp.dest(dist + 'js'))
 );
 
+gulp.task('bower', function() {
+  return gulp.src(mainBowerFiles())
+    .pipe(gulp.dest('./.tmp/vendors'))
+});
+
+gulp.task('vendorsJs', function() {
+  return gulp.src('./.tmp/vendors/**/*.js')
+    .pipe($.concat('vendors.js'))
+    .pipe(gulp.dest(dist + 'js'));
+});
+
 // monitoring source changes & autorun the task
 gulp.task('watch', function() {
   gulp.watch(srcs.scss, ['scss']);
@@ -71,4 +83,4 @@ gulp.task('watch', function() {
 });
 
 // default task
-gulp.task('default', ['scss', 'jade', 'babel', 'watch']);
+gulp.task('default', ['scss', 'jade', 'babel', 'bower', 'vendorsJs', 'watch']);

@@ -43,12 +43,12 @@ gulp.task('scss', function() {
 
 gulp.task('babel', () =>
   gulp.src('./src/js/**/*.js')
-  // .pipe($.sourcemaps.init())
+  .pipe($.sourcemaps.init())
   .pipe($.babel({
     presets: ['es2015']
   }))
   .pipe($.concat('all.js'))
-  // .pipe($.sourcemaps.write('.'))
+  .pipe($.sourcemaps.write('.'))
   .pipe(gulp.dest('./dist/js'))
 );
 

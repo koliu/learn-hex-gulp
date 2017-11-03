@@ -18,7 +18,8 @@ gulp.task('copyHTML', function() {
   // copy src/*.* to dist/
   return gulp.src(srcs.html)
     .pipe($.plumber())
-    .pipe(gulp.dest(dist));
+    .pipe(gulp.dest(dist))
+    .pipe(browserSync.stream());
 });
 
 gulp.task('jade', function() {
@@ -31,6 +32,7 @@ gulp.task('jade', function() {
       pretty: true // Don't compress
     }))
     .pipe(gulp.dest(dist))
+    .pipe(browserSync.stream());
 });
 
 gulp.task('scss', function() {
@@ -51,19 +53,21 @@ gulp.task('scss', function() {
     .pipe($.sass().on('error', $.sass.logError)) // compile to css
     .pipe($.postcss(plugins))
     .pipe($.sourcemaps.write('.'))
-    .pipe(gulp.dest(dist + 'css'));
+    .pipe(gulp.dest(dist + 'css'))
+    .pipe(browserSync.stream());
 });
 
-gulp.task('babel', () =>
+gulp.task('babel', () => {
   gulp.src(srcs.js)
-  .pipe($.sourcemaps.init())
-  .pipe($.babel({
-    presets: ['es2015']
-  }))
-  .pipe($.concat('all.js'))
-  .pipe($.sourcemaps.write('.'))
-  .pipe(gulp.dest(dist + 'js'))
-);
+    .pipe($.sourcemaps.init())
+    .pipe($.babel({
+      presets: ['es2015']
+    }))
+    .pipe($.concat('all.js'))
+    .pipe($.sourcemaps.write('.'))
+    .pipe(gulp.dest(dist + 'js'))
+    .pipe(browserSync.stream());
+});
 
 gulp.task('bower', function() {
   return gulp.src(mainBowerFiles())

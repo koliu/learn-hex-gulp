@@ -71,6 +71,10 @@ gulp.task('bower', function() {
 
 gulp.task('vendorsJs', ['bower'], function() {
   return gulp.src('./.tmp/vendors/**/*.js')
+    .pipe($.order([ // dependency order by index
+      'jquery.js',
+      'bootstrap.js'
+    ]))
     .pipe($.concat('vendors.js'))
     .pipe(gulp.dest(dist + 'js'));
 });

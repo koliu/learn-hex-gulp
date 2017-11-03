@@ -52,6 +52,7 @@ gulp.task('scss', function() {
     .pipe($.plumber())
     .pipe($.sass().on('error', $.sass.logError)) // compile to css
     .pipe($.postcss(plugins))
+    .pipe($.minifyCss()) // put it after compiled
     .pipe($.sourcemaps.write('.'))
     .pipe(gulp.dest(dist + 'css'))
     .pipe(browserSync.stream());
@@ -64,6 +65,7 @@ gulp.task('babel', () => {
       presets: ['es2015']
     }))
     .pipe($.concat('all.js'))
+    .pipe($.uglify()) // put it after compiled & concated
     .pipe($.sourcemaps.write('.'))
     .pipe(gulp.dest(dist + 'js'))
     .pipe(browserSync.stream());
@@ -81,6 +83,7 @@ gulp.task('vendorsJs', ['bower'], function() {
       'bootstrap.js'
     ]))
     .pipe($.concat('vendors.js'))
+    .pipe($.uglify()) // put it after concated
     .pipe(gulp.dest(dist + 'js'));
 });
 

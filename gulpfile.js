@@ -3,33 +3,35 @@ var $ = require('gulp-load-plugins')(); // just use for gulp-xxx
 var autoprefixer = require('autoprefixer');
 
 // 加入任務
-gulp.task('copyHTML', function () {
-	// copy src/*.* to dist/
-	return gulp.src('./src/**/*.html')
-  .pipe($.plumber())
-	.pipe(gulp.dest('./dist/'));
+gulp.task('copyHTML', function() {
+  // copy src/*.* to dist/
+  return gulp.src('./src/**/*.html')
+    .pipe($.plumber())
+    .pipe(gulp.dest('./dist/'));
 });
 
 gulp.task('jade', function() {
   // var YOUR_LOCALS = {};
- 
+
   // gulp.src('./src/*.jade')
   gulp.src('./src/**/*.jade') // for all sub-dirs & files belong to src
     .pipe($.plumber())
     .pipe($.jade({
-    	pretty: true // Don't compress
+      pretty: true // Don't compress
     }))
     .pipe(gulp.dest('./dist/'))
 });
 
-gulp.task('scss', function () {
+gulp.task('scss', function() {
   var plugins = [
-    autoprefixer({browsers: [
-      'last 1 version',
-      '> 5%',
-      'ie 6-8',
-      'Firefox > 20'
-      ]})
+    autoprefixer({
+      browsers: [
+        'last 1 version',
+        '> 5%',
+        'ie 6-8',
+        'Firefox > 20'
+      ]
+    })
   ];
 
   return gulp.src('./src/scss/*.scss')
@@ -39,11 +41,23 @@ gulp.task('scss', function () {
     .pipe(gulp.dest('./dist/css'));
 });
 
+gulp.task('babel', () =>
+  gulp.src('./src/js/**/*.js')
+  // .pipe($.sourcemaps.init())
+  .pipe($.babel({
+    presets: ['es2015']
+  }))
+  // .pipe($.concat('all.js'))
+  // .pipe($.sourcemaps.write('.'))
+  .pipe(gulp.dest('./dist/js'))
+);
+
 // monitoring source changes & autorun the task
-gulp.task('watch', function () {
+gulp.task('watch', function() {
   gulp.watch('./src/scss/*.scss', ['scss']);
   gulp.watch('./src/**/*.jade', ['jade']);
+  gulp.watch('./src/js/**/*.js', ['babel']);
 });
 
 // default task
-gulp.task('default', ['scss','jade','watch']);
+gulp.task('default', ['scss', 'jade', 'babel', 'watch']);

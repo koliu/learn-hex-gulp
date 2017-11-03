@@ -2,6 +2,7 @@ var gulp = require('gulp'); // 引入 gulp
 var $ = require('gulp-load-plugins')(); // just use for gulp-xxx
 var autoprefixer = require('autoprefixer');
 var mainBowerFiles = require('main-bower-files');
+var browserSync = require('browser-sync').create();
 
 var srcs = {
   html: './src/**/*.html',
@@ -79,6 +80,15 @@ gulp.task('vendorsJs', ['bower'], function() {
     .pipe(gulp.dest(dist + 'js'));
 });
 
+// Static server
+gulp.task('browser-sync', function() {
+  browserSync.init({
+    server: {
+      baseDir: dist
+    }
+  });
+});
+
 // monitoring source changes & autorun the task
 gulp.task('watch', function() {
   gulp.watch(srcs.scss, ['scss']);
@@ -87,4 +97,11 @@ gulp.task('watch', function() {
 });
 
 // default task
-gulp.task('default', ['scss', 'jade', 'babel', 'vendorsJs', 'watch']);
+gulp.task('default', [
+  'scss',
+  'jade',
+  'babel',
+  'vendorsJs',
+  'browser-sync',
+  'watch'
+]);

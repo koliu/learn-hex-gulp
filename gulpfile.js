@@ -69,7 +69,7 @@ gulp.task('bower', function() {
     .pipe(gulp.dest('./.tmp/vendors'))
 });
 
-gulp.task('vendorsJs', function() {
+gulp.task('vendorsJs', ['bower'], function() {
   return gulp.src('./.tmp/vendors/**/*.js')
     .pipe($.concat('vendors.js'))
     .pipe(gulp.dest(dist + 'js'));
@@ -83,4 +83,4 @@ gulp.task('watch', function() {
 });
 
 // default task
-gulp.task('default', ['scss', 'jade', 'babel', 'bower', 'vendorsJs', 'watch']);
+gulp.task('default', ['scss', 'jade', 'babel', 'vendorsJs', 'watch']);

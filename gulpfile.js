@@ -4,6 +4,7 @@ var autoprefixer = require('autoprefixer');
 var mainBowerFiles = require('main-bower-files');
 var browserSync = require('browser-sync').create();
 var minimist = require('minimist');
+var gulpSequence = require('gulp-sequence');
 
 var srcs = {
   html: './src/**/*.html',
@@ -124,6 +125,13 @@ gulp.task('watch', function() {
   gulp.watch(srcs.jade, ['jade']);
   gulp.watch(srcs.js, ['babel']);
 });
+
+// 1. run 'clean'
+// 2. run 'jade', 'scss' in parallel;  after 'clean'; 
+// 3. run 'babel' after 'jade', 'scss'; 
+// 4. run 'vendorsJs' after 'babel'. 
+gulp.task('prod', gulpSequence('clean', ['jade', 'scss'], 'babel', 'vendorsJs'));
+
 
 // default task
 gulp.task('default', [

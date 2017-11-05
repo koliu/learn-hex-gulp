@@ -25,6 +25,12 @@ var equalsEnv = (env, fn) => {
   return $.if(options.env === env, fn);
 };
 
+// 資料夾reset
+gulp.task('clean', function() {
+  return gulp.src(['./.tmp', './dist'], { read: false })
+    .pipe($.clean());
+});
+
 // 加入任務
 gulp.task('copyHTML', function() {
   // copy src/*.* to dist/

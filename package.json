@@ -34,5 +34,8 @@
     "gulp-uglify": "^3.0.0",
     "main-bower-files": "^2.13.1",
     "minimist": "^1.2.0"
+  },
+  "devDependencies": {
+    "gulp-rename": "^1.2.2"
   }
 }

@@ -7,11 +7,11 @@ var minimist = require('minimist');
 var gulpSequence = require('gulp-sequence');
 
 var srcs = {
-  html: './src/**/*.html',
   jade: './src/**/*.jade',
   scss: './src/scss/*.scss',
   js: './src/js/**/*.js',
-  img: './src/images/*'
+  img: './src/images/*',
+  _static: ['./src/**/*.md', './src/**/*.html']
 };
 
 var dist = './dist/';
@@ -34,9 +34,9 @@ gulp.task('clean', function() {
 });
 
 // 加入任務
-gulp.task('copyHTML', function() {
+gulp.task('copy-static', function() {
   // copy src/*.* to dist/
-  return gulp.src(srcs.html)
+  return gulp.src(srcs._static)
     .pipe($.plumber())
     .pipe(gulp.dest(dist))
     .pipe(browserSync.stream());
@@ -133,16 +133,24 @@ gulp.task('watch', function() {
   gulp.watch(srcs.js, ['babel']);
 });
 
+
+
 // 1. run 'clean'
 // 2. run 'jade', 'scss', 'image-min' in parallel;  after 'clean'; 
 // 3. run 'babel' after 'jade', 'scss', 'image-min'; 
 // 4. run 'vendorsJs' after 'babel'. 
-gulp.task('prod', gulpSequence('clean', ['jade', 'scss', 'image-min'], 'babel', 'vendorsJs'));
+gulp.task('prod', gulpSequence('clean', ['copy-static', 'jade', 'scss', 'image-min'], 'babel', 'vendorsJs'));
 
+// delpoy to github-pages:
+gulp.task('deploy-ghp', ['prod'], function() {
+  return gulp.src(dist + '**/*')
+    .pipe($.ghPages());
+});
 
 // default task
 gulp.task('default', gulpSequence(
   'clean', [
+    'copy-static',
     'scss',
     'jade',
     'image-min'

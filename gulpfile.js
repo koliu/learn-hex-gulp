@@ -122,7 +122,7 @@ gulp.task('browser-sync', function() {
 
 gulp.task('image-min', () =>
   gulp.src(srcs.img)
-  .pipe($.imagemin())
+  .pipe(equalsEnv(envs.prod, $.imagemin()))
   .pipe(gulp.dest(dist + 'images'))
 );
 

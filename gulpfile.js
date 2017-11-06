@@ -11,6 +11,7 @@ var srcs = {
   jade: './src/**/*.jade',
   scss: './src/scss/*.scss',
   js: './src/js/**/*.js',
+  img: './src/images/*'
 };
 
 var dist = './dist/';
@@ -119,6 +120,12 @@ gulp.task('browser-sync', function() {
   });
 });
 
+gulp.task('image-min', () =>
+  gulp.src(srcs.img)
+  .pipe($.imagemin())
+  .pipe(gulp.dest(dist + 'images'))
+);
+
 // monitoring source changes & autorun the task
 gulp.task('watch', function() {
   gulp.watch(srcs.scss, ['scss']);
@@ -127,18 +134,21 @@ gulp.task('watch', function() {
 });
 
 // 1. run 'clean'
-// 2. run 'jade', 'scss' in parallel;  after 'clean'; 
-// 3. run 'babel' after 'jade', 'scss'; 
+// 2. run 'jade', 'scss', 'image-min' in parallel;  after 'clean'; 
+// 3. run 'babel' after 'jade', 'scss', 'image-min'; 
 // 4. run 'vendorsJs' after 'babel'. 
-gulp.task('prod', gulpSequence('clean', ['jade', 'scss'], 'babel', 'vendorsJs'));
+gulp.task('prod', gulpSequence('clean', ['jade', 'scss', 'image-min'], 'babel', 'vendorsJs'));
 
 
 // default task
-gulp.task('default', [
-  'scss',
-  'jade',
+gulp.task('default', gulpSequence(
+  'clean', [
+    'scss',
+    'jade',
+    'image-min'
+  ],
   'babel',
   'vendorsJs',
   'browser-sync',
   'watch'
-]);
+), );

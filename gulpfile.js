@@ -73,6 +73,10 @@ gulp.task('scss', function() {
     .pipe($.sass().on('error', $.sass.logError)) // compile to css
     .pipe($.postcss(plugins))
     .pipe(equalsEnv(envs.prod, $.minifyCss())) // put it after compiled
+    .pipe(equalsEnv(envs.prod, $.rename(function(path) {
+      path.basename += ".min";
+      path.extname = ".css";
+    })))
     .pipe($.sourcemaps.write('.'))
     .pipe(gulp.dest(dist + 'css'))
     .pipe(browserSync.stream());
@@ -89,6 +93,10 @@ gulp.task('babel', () => {
       compress: {
         drop_console: true
       }
+    })))
+    .pipe(equalsEnv(envs.prod, $.rename(function(path) {
+      path.basename += ".min";
+      path.extname = ".js";
     })))
     .pipe($.sourcemaps.write('.'))
     .pipe(gulp.dest(dist + 'js'))
@@ -108,6 +116,10 @@ gulp.task('vendorsJs', ['bower'], function() {
     ]))
     .pipe($.concat('vendors.js'))
     .pipe(equalsEnv(envs.prod, $.uglify())) // put it after concated
+    .pipe(equalsEnv(envs.prod, $.rename(function(path) {
+      path.basename += ".min";
+      path.extname = ".js";
+    })))
     .pipe(gulp.dest(dist + 'js'));
 });
 

@@ -11,7 +11,7 @@ var srcs = {
   scss: './src/scss/*.scss',
   js: './src/js/**/*.js',
   img: './src/images/*',
-  _static: ['./src/**/*.md', './src/**/*.html']
+  _static: ['./src/**/*.md']
 };
 
 var dist = './dist/';
@@ -51,6 +51,12 @@ gulp.task('jade', function() {
     .pipe($.jade({
       pretty: true // Don't compress
     }))
+    .pipe(equalsEnv(envs.prod, $.htmlReplace({
+      'css': dist + 'css/all.min.css',
+      'js': dist + 'js/all.min.js'
+    }, {
+      resolvePaths: true
+    })))
     .pipe(gulp.dest(dist))
     .pipe(browserSync.stream());
 });

@@ -36,6 +36,7 @@
     "minimist": "^1.2.0"
   },
   "devDependencies": {
+    "gulp-html-replace": "^1.6.2",
     "gulp-rename": "^1.2.2"
   }
 }

@@ -61,7 +61,7 @@ gulp.task('jade', function() {
       'js': 'js/all.min.js',
       'vendors': 'js/vendors.min.js'
     }, {
-      resolvePaths: true
+      resolvePaths: false
     })))
     .pipe(gulp.dest(dist))
     .pipe(browserSync.stream());

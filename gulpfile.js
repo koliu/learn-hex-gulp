@@ -1,12 +1,12 @@
-var gulp = require('gulp'); // 引入 gulp
-var $ = require('gulp-load-plugins')(); // just use for gulp-xxx
-var autoprefixer = require('autoprefixer');
-var mainBowerFiles = require('main-bower-files');
-var browserSync = require('browser-sync').create();
-var minimist = require('minimist');
-var gulpSequence = require('gulp-sequence');
+const gulp = require('gulp'); // 引入 gulp
+const $ = require('gulp-load-plugins')(); // just use for gulp-xxx
+const autoprefixer = require('autoprefixer');
+const mainBowerFiles = require('main-bower-files');
+const browserSync = require('browser-sync').create();
+const minimist = require('minimist');
+const gulpSequence = require('gulp-sequence');
 
-var srcs = {
+const srcs = {
   jade: './src/**/*.jade',
   scss: './src/scss/*.scss',
   js: './src/js/**/*.js',
@@ -14,18 +14,23 @@ var srcs = {
   _static: ['./src/**/*.md']
 };
 
-var dist = './dist/';
+const dist = './dist/';
 
-var envs = { prod: 'production', dev: 'develop' };
-var envOptions = {
+const envs = { prod: 'production', dev: 'develop' };
+const envOptions = {
   string: 'env',
   default: { env: envs.dev }
 };
-var options = minimist(process.argv.slice(2), envOptions);
+const options = minimist(process.argv.slice(2), envOptions);
 console.log(options);
-var equalsEnv = (env, fn) => {
-  return $.if(options.env === env, fn);
+
+const isEqualsEnv = (env) => {
+  return options.env === env;
 };
+const pipeByEnv = (env, fn) => {
+  return $.if(isEqualsEnv(env), fn);
+};
+const isEnvProd = isEqualsEnv(envs.prod);
 
 // 資料夾reset
 gulp.task('clean', function() {
@@ -51,7 +56,7 @@ gulp.task('jade', function() {
     .pipe($.jade({
       pretty: true // Don't compress
     }))
-    .pipe(equalsEnv(envs.prod, $.htmlReplace({
+    .pipe(pipeByEnv(envs.prod, $.htmlReplace({
       'css': dist + 'css/all.min.css',
       'js': dist + 'js/all.min.js'
     }, {
@@ -62,7 +67,7 @@ gulp.task('jade', function() {
 });
 
 gulp.task('scss', function() {
-  var plugins = [
+  const plugins = [
     autoprefixer({
       browsers: [
         'last 1 version',
@@ -78,8 +83,8 @@ gulp.task('scss', function() {
     .pipe($.plumber())
     .pipe($.sass().on('error', $.sass.logError)) // compile to css
     .pipe($.postcss(plugins))
-    .pipe(equalsEnv(envs.prod, $.minifyCss())) // put it after compiled
-    .pipe(equalsEnv(envs.prod, $.rename(function(path) {
+    .pipe(pipeByEnv(envs.prod, $.minifyCss())) // put it after compiled
+    .pipe(pipeByEnv(envs.prod, $.rename(function(path) {
       path.basename += ".min";
       path.extname = ".css";
     })))
@@ -95,12 +100,12 @@ gulp.task('babel', () => {
       presets: ['es2015']
     }))
     .pipe($.concat('all.js'))
-    .pipe(equalsEnv(envs.prod, $.uglify({ // put it after compiled & concated
+    .pipe(pipeByEnv(envs.prod, $.uglify({ // put it after compiled & concated
       compress: {
         drop_console: true
       }
     })))
-    .pipe(equalsEnv(envs.prod, $.rename(function(path) {
+    .pipe(pipeByEnv(envs.prod, $.rename(function(path) {
       path.basename += ".min";
       path.extname = ".js";
     })))
@@ -121,8 +126,8 @@ gulp.task('vendorsJs', ['bower'], function() {
       'bootstrap.js'
     ]))
     .pipe($.concat('vendors.js'))
-    .pipe(equalsEnv(envs.prod, $.uglify())) // put it after concated
-    .pipe(equalsEnv(envs.prod, $.rename(function(path) {
+    .pipe(pipeByEnv(envs.prod, $.uglify())) // put it after concated
+    .pipe(pipeByEnv(envs.prod, $.rename(function(path) {
       path.basename += ".min";
       path.extname = ".js";
     })))
@@ -140,7 +145,7 @@ gulp.task('browser-sync', function() {
 
 gulp.task('image-min', () =>
   gulp.src(srcs.img)
-  .pipe(equalsEnv(envs.prod, $.imagemin()))
+  .pipe(pipeByEnv(envs.prod, $.imagemin()))
   .pipe(gulp.dest(dist + 'images'))
 );
 

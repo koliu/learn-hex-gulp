@@ -59,7 +59,7 @@ gulp.task('jade', function() {
     .pipe(pipeByEnv(envs.prod, $.htmlReplace({
       'css': dist + 'css/all.min.css',
       'js': dist + 'js/all.min.js',
-      'vendors': dist + 'js/vendor.min.js'
+      'vendors': dist + 'js/vendors.min.js'
     }, {
       resolvePaths: true
     })))

@@ -115,7 +115,14 @@ gulp.task('babel', () => {
 });
 
 gulp.task('bower', function() {
-  return gulp.src(mainBowerFiles())
+  const file = isEnvProd ? 'vue.min.js' : 'vue.js';
+  return gulp.src(mainBowerFiles({
+      "overrides": {
+        "vue": { // 套件名稱
+          "main": '../../bower_components/vue/dist/' + file // 取用的資料夾路徑
+        }
+      }
+    }))
     .pipe(gulp.dest('./.tmp/vendors'))
 });
 

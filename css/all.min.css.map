@@ -1,0 +1,1 @@
+{"version":3,"sources":["all.scss"],"names":[],"mappings":"AAEA,KACI,iBAAA,IAGJ,QACI,kBAAA,eAAA,UAAA,eACA,eAAA,UAAA,OAAA","file":"all.min.css","sourcesContent":["$primary-color: red;\r\n\r\nbody {\r\n    background-color: $primary-color;\r\n}\r\n\r\n.rotate {\r\n    transform: rotate(120deg);\r\n    filter: blur(3px);\r\n}"]}
